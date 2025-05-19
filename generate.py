@@ -19,6 +19,28 @@ svg = Element("svg", {
     "preserveAspectRatio": "xMinYMin meet"
 })
 
+
+def reading_grid():
+    with open("grid.txt", 'r') as f:
+        line = f.read().splitlines()
+    patterns = []
+    i = 0
+    while i != len(line):
+        if (len(line[i]) < 1):
+            i += 1
+            continue
+        pattern = []
+        while i < len(line) and len(line[i]) > 1:
+            pattern.append(line[i])
+            i += 1
+        if (pattern):
+            patterns.append(pattern)
+    print(patterns[0])
+    print(patterns[1])
+    print(patterns[2])
+    print(patterns[3])
+    return patterns
+
 # --- Génération de la grille ---
 for row in range(rows):
     for col in range(cols):
@@ -33,13 +55,18 @@ for row in range(rows):
             "width": str(cell_size),
             "height": str(cell_size)
         })
-        
+
+
+count = 0
 for row in range(rows):
     for col in range(cols):
         x = col * (cell_size + spacing)
         y = row * (cell_size + spacing)
         if x > width - (cell_size + 1) and y == height - 10:
             break
+        count += 1
+        if count % 2 == 0:
+            continue
         SubElement(svg, "image", {
             "href": "Alive.svg",  # ton image de cellule vivante
             "x": str(x),
@@ -51,4 +78,5 @@ for row in range(rows):
 # --- Sauvegarde du fichier ---
 output_file = "full_grid_green.svg"
 ElementTree(svg).write(output_file, encoding="utf-8", xml_declaration=True)
+reading_grid()
 print(f"SVG généré : {output_file}")
