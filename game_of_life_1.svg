@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="676" height="96">
+
+  <!-- fond -->
+  <image href="base_grid.png" style="image-rendering: pixelated;" width="676" height="96"/>
+
+  <!-- frame 0 -->
+  <g id="frame0">
+    <image href="full_alive_green.png" x="4" y="18" width="10" height="10"/>
+  </g>
+
+  <!-- frame 1 -->
+  <g id="frame1" visibility="hidden">
+    <image href="full_alive_green.png" x="17" y="18" width="10" height="10"/>
+  </g>
+
+  <!-- frame 2 -->
+  <g id="frame2" visibility="hidden">
+    <image href="full_alive_green.png" x="29" y="18" width="10" height="10"/>
+  </g>
+
+  <!-- animation -->
+  <set attributeName="visibility" to="visible" begin="0s" dur="1s" xlink:href="#frame0"/>
+  <set attributeName="visibility" to="hidden" begin="1s" xlink:href="#frame0"/>
+
+  <set attributeName="visibility" to="visible" begin="1s" dur="1s" xlink:href="#frame1"/>
+  <set attributeName="visibility" to="hidden" begin="2s" xlink:href="#frame1"/>
+
+  <set attributeName="visibility" to="visible" begin="2s" dur="1s" xlink:href="#frame2"/>
+  <set attributeName="visibility" to="hidden" begin="3s" xlink:href="#frame2"/>
+
+</svg>

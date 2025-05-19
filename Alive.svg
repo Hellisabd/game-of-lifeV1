@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+  <!-- fond -->
+  <rect x="0" y="0" width="10" height="10" fill="#56d364"/>
+
+  <!-- bordures -->
+  <rect x="0" y="0" width="10" height="10" fill="none" stroke="#5fd56c" stroke-width="1"/>
+
+  <!-- coins : 1px à chaque coin en plus sombre -->
+  <rect x="0" y="0" width="1" height="1" fill="#2d5d38"/> <!-- coin haut gauche -->
+  <rect x="9" y="0" width="1" height="1" fill="#2d5d38"/> <!-- coin haut droit -->
+  <rect x="0" y="9" width="1" height="1" fill="#2d5d38"/> <!-- coin bas gauche -->
+  <rect x="9" y="9" width="1" height="1" fill="#2d5d38"/> <!-- coin bas droit -->
+</svg>
