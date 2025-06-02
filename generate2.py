@@ -1,15 +1,16 @@
-from xml.etree.ElementTree import Element, SubElement, ElementTree
+import io
 
 # --- Configuration générale ---
-cell_size   = 10            # taille d'une cellule (pixels)
-spacing     = 3             # espace (pixels) entre chaque cellule
-image_alive = "full_alive_green.png"
-image_dead  = "base_grid_unit.svg"
+cell_size      = 10              # taille d'une cellule (pixels)
+spacing        = 3               # espace (pixels) entre chaque cellule
+image_alive    = "full_alive_green.png"
+image_dead     = "base_grid_unit.svg"
 
 input_file      = "grid.txt"
 output_file     = "animated_game_of_life.svg"
-num_generations = 20         # nombre de générations à afficher
-frame_duration  = 0.2       # durée d'affichage de chaque génération (en secondes)
+num_generations = 20              # nombre de générations à afficher
+frame_duration  = 0.2             # durée d'affichage de chaque génération (secondes)
+
 
 def read_single_grid(path=input_file):
     """
@@ -29,6 +30,7 @@ def read_single_grid(path=input_file):
         if any(c not in ("0", "1") for c in li):
             raise ValueError("Chaque caractère doit être '0' ou '1'.")
     return [[int(c) for c in line] for line in lines]
+
 
 def compute_next_generation_torus(grid):
     """
@@ -60,6 +62,7 @@ def compute_next_generation_torus(grid):
                 new_grid[r][c] = 1 if (voisins == 3) else 0
     return new_grid
 
+
 if __name__ == "__main__":
     # 1) Lecture de la grille initiale
     try:
@@ -81,59 +84,64 @@ if __name__ == "__main__":
     single_width  = cols * (cell_size + spacing) - spacing
     single_height = rows * (cell_size + spacing) - spacing
 
-    # 4) Création du SVG
-    svg = Element("svg", {
-        "xmlns": "http://www.w3.org/2000/svg",
-        "width": str(single_width),
-        "height": str(single_height),
-        "viewBox": f"0 0 {single_width} {single_height}",
-        "preserveAspectRatio": "xMinYMin meet"
-    })
+    # 4) Calcul de la durée totale et de la fraction en pourcentage
+    total_duration = num_generations * frame_duration  # (ex. 20 * 0.2 = 4.0 s)
+    # fraction X (%) que chaque génération occupe dans la timeline
+    X = (frame_duration / total_duration) * 100        # (ex. (0.2/4.0)*100 = 5 %)
 
-    # 4a) Couche des cellules mortes : affichée en permanence
-    g_dead = SubElement(svg, "g")
+    # 5) Construction du SVG « à la main » dans un StringIO
+    buf = io.StringIO()
+
+    # 5a) En-tête XML + ouverture de <svg>
+    buf.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+    buf.write(f"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{single_width}\" height=\"{single_height}\" ")
+    buf.write(f"viewBox=\"0 0 {single_width} {single_height}\" preserveAspectRatio=\"xMinYMin meet\">\n")
+
+    # 5b) Bloc <style> avec un unique @keyframes blink
+    buf.write("  <style type=\"text/css\"><![CDATA[\n")
+    buf.write("    @keyframes blink {\n")
+    buf.write("      0%       { opacity: 1; }\n")
+    buf.write(f"      {X:.4f}% {{ opacity: 1; }}\n")
+    buf.write(f"      {X + 0.0001:.4f}% {{ opacity: 0; }}\n")
+    buf.write("      100%     { opacity: 0; }\n")
+    buf.write("    }\n")
+    buf.write("  ]]></style>\n\n")
+
+    # 5c) Couche des cellules mortes (toujours visibles en arrière-plan)
+    buf.write("  <!-- Couche des cellules mortes -->\n")
+    buf.write("  <g id=\"dead\">\n")
     for r in range(rows):
         for c in range(cols):
             x = c * (cell_size + spacing)
             y = r * (cell_size + spacing)
-            SubElement(g_dead, "image", {
-                "href": image_dead,
-                "x": str(x),
-                "y": str(y),
-                "width": str(cell_size),
-                "height": str(cell_size)
-            })
+            buf.write(f"    <image href=\"{image_dead}\" x=\"{x}\" y=\"{y}\" width=\"{cell_size}\" height=\"{cell_size}\" />\n")
+    buf.write("  </g>\n\n")
 
-    # 4b) Pour chaque génération, un <g> avec opacity="0", puis animate opacity 0→1→0 (mode discret)
+    # 5d) Pour chaque génération, créer un <g> invisible au départ,
+    #      qui deviendra visible pendant frame_duration puis redeviendra transparent.
+    buf.write("  <!-- Couches \"vivant\" par génération, chacune animée en CSS -->\n")
     for gen_index, grid in enumerate(generations):
-        g_alive = SubElement(svg, "g", {"opacity": "0"})
-
-        # Calcul du moment de début en secondes, avec incréments de frame_duration
         begin_time = gen_index * frame_duration
-        SubElement(g_alive, "animate", {
-            "attributeName": "opacity",
-            "values": "1;0",
-            "keyTimes": "0;1",
-            "calcMode": "discrete",
-            "begin": f"{begin_time:.1f}s",
-            "dur": f"{frame_duration:.1f}s",
-            "fill": "freeze"
-        })
-
-        # Seules les cellules vivantes sont dessinées ici
+        # style : 
+        #   opacity:0 initialement, 
+        #   animation: blink total_duration s infinite, 
+        #   animation-delay = begin_time s
+        buf.write(f"  <g style=\"opacity:0; animation: blink {total_duration}s infinite; animation-delay: {begin_time:.1f}s;\">\n")
+        # dessiner uniquement les cellules vivantes
         for r in range(rows):
             for c in range(cols):
                 if grid[r][c] == 1:
                     x = c * (cell_size + spacing)
                     y = r * (cell_size + spacing)
-                    SubElement(g_alive, "image", {
-                        "href": image_alive,
-                        "x": str(x),
-                        "y": str(y),
-                        "width": str(cell_size),
-                        "height": str(cell_size)
-                    })
+                    buf.write(f"    <image href=\"{image_alive}\" x=\"{x}\" y=\"{y}\" width=\"{cell_size}\" height=\"{cell_size}\" />\n")
+        buf.write("  </g>\n\n")
 
-    # 5) Sauvegarde du fichier SVG
-    ElementTree(svg).write(output_file, encoding="utf-8", xml_declaration=True)
-    print(f"SVG animé généré : {output_file}")
+    # 5e) Fermeture de </svg>
+    buf.write("</svg>\n")
+
+    # 6) Écrire dans le fichier final
+    svg_content = buf.getvalue()
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write(svg_content)
+
+    print(f"SVG animé (CSS) généré : {output_file}")
