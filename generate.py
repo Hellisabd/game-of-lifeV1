@@ -35,10 +35,6 @@ def reading_grid():
             i += 1
         if (pattern):
             patterns.append(pattern)
-    print(patterns[0])
-    print(patterns[1])
-    print(patterns[2])
-    print(patterns[3])
     return patterns
 
 # --- Génération de la grille ---
@@ -58,22 +54,22 @@ for row in range(rows):
 
 
 count = 0
-for row in range(rows):
-    for col in range(cols):
-        x = col * (cell_size + spacing)
-        y = row * (cell_size + spacing)
-        if x > width - (cell_size + 1) and y == height - 10:
-            break
-        count += 1
-        if count % 2 == 0:
-            continue
-        SubElement(svg, "image", {
-            "href": "Alive.svg",  # ton image de cellule vivante
-            "x": str(x),
-            "y": str(y),
-            "width": str(cell_size),
-            "height": str(cell_size)
-        })
+# for row in range(rows):
+#     for col in range(cols):
+#         x = col * (cell_size + spacing)
+#         y = row * (cell_size + spacing)
+#         if x > width - (cell_size + 1) and y == height - 10:
+#             break
+#         count += 1
+#         if count % 2 == 0:
+#             continue
+#         SubElement(svg, "image", {
+#             "href": "Alive.svg",  # ton image de cellule vivante
+#             "x": str(x),
+#             "y": str(y),
+#             "width": str(cell_size),
+#             "height": str(cell_size)
+#         })
 
 # --- Sauvegarde du fichier ---
 output_file = "full_grid_green.svg"
