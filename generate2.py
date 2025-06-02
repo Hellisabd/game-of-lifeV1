@@ -3,8 +3,8 @@ import io
 # --- Configuration générale ---
 cell_size      = 10              # taille d'une cellule (pixels)
 spacing        = 3               # espace (pixels) entre chaque cellule
-image_alive    = "full_alive_green.png"
-image_dead     = "base_grid_unit.svg"
+image_dead    = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+CiAgPCEtLSBmb25kIC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzE1MWIyMyIvPgoKICA8IS0tIGJvcmR1cmVzIC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMjEyNzJlIiBzdHJva2Utd2lkdGg9IjEiLz4KCiAgPCEtLSBjb2lucyA6IDFweCDDoCBjaGFxdWUgY29pbiBlbiBwbHVzIHNvbWJyZSAtLT4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSIjMTUxOTIwIi8+IDwhLS0gY29pbiBoYXV0IGdhdWNoZSAtLT4KICA8cmVjdCB4PSI5IiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSIjMTUxOTIwIi8+IDwhLS0gY29pbiBoYXV0IGRyb2l0IC0tPgogIDxyZWN0IHg9IjAiIHk9IjkiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMxNTE5MjAiLz4gPCEtLSBjb2luIGJhcyBnYXVjaGUgLS0+CiAgPHJlY3QgeD0iOSIgeT0iOSIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0iIzE1MTkyMCIvPiA8IS0tIGNvaW4gYmFzIGRyb2l0IC0tPgo8L3N2Zz4K"
+image_alive     = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAdnJLH8AAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+kFEBUbHMK8zksAAABySURBVBjT1cqxDcJAEAXR+We8mABdCEVgx7RCQIpEF3ThjijAciMH2Qa3FIAtkTLSZE/99Ryn+4BlYykvzjxO6PK8Rd0HQSxCIdJbJMu2igCCwLKR+LG/gF4coVUghBenkbePw3Ck221ptfm6virzOPEBH94gq8V9TNkAAAAASUVORK5CYII="
 
 input_file      = "grid.txt"
 output_file     = "animated_game_of_life.svg"
