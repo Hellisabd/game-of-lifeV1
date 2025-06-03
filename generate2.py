@@ -8,7 +8,7 @@ image_alive     = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAAC
 
 input_file      = "grid.txt"
 output_file     = "animated_game_of_life.svg"
-num_generations = 100              # nombre de générations à afficher
+num_generations = 40              # nombre de générations à afficher
 frame_duration  = 0.2             # durée d'affichage de chaque génération (secondes)
 
 
